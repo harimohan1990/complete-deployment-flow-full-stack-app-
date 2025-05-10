@@ -228,7 +228,101 @@ services:
 3. Install Docker + Docker Compose
 4. Pull your project repo
 5. Run: `docker-compose up -d`
-6. Open ports 80/8000 in EC2 Security Group
+6. Open ports 80/8000 in EC2 Security Group\
+
+Perfect! To include **DB deployment**, here’s how we’ll update the boilerplate:
+
+---
+
+## 🧩 Updated Stack Overview (with Database)
+
+### 🔧 **Frontend**
+
+* React (CRUD UI)
+
+### 🐍 **Backend**
+
+* FastAPI (REST API)
+
+### 🛢️ **Database**
+
+* PostgreSQL (via Docker container)
+* Connected via SQLAlchemy ORM
+
+### 🐳 **Containerization**
+
+* Docker Compose manages 3 services:
+  `frontend`, `backend`, `db`
+
+### ☁️ **Deployment**
+
+* AWS EC2 (Dockerized)
+* Optional: Nginx + HTTPS
+* Optional: CI/CD (GitHub Actions)
+
+---
+
+## 📦 Docker Compose Overview
+
+```yaml
+version: '3.8'
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: fastapi_user
+      POSTGRES_PASSWORD: fastapi_pass
+      POSTGRES_DB: fastapi_db
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
+```
+
+---
+
+## 📌 Backend `.env` (example)
+
+```env
+DB_URL=postgresql://fastapi_user:fastapi_pass@db:5432/fastapi_db
+```
+
+---
+
+## ✅ What I’ll Include in the GitHub Boilerplate
+
+* `/frontend`: React CRUD app
+* `/backend`: FastAPI app with SQLAlchemy + PostgreSQL
+* `docker-compose.yml`: full stack (frontend + backend + db)
+* `README.md`: setup + EC2 deployment + SSL config
+* Optional `/scripts`: EC2 setup script + sample CI/CD config
+
+---
+
+Do you want me to:
+
+1. **Create a ZIP file** of the project for download now, **or**
+2. Provide full code in this chat so you can copy & push to GitHub?
+
+
 
 ---
 
